@@ -176,10 +176,11 @@
 	};
 	contentWayPoint();
 
-	  /* -------------------------------
+  /* -------------------------------
    * Contact form: AJAX submit
-   * Uses the form's own action URL (e.g. Formspree)
+   * Uses the form's action URL (Formspree)
    * Shows #form-message-success / #form-message-warning
+   * Smooth-scrolls to the message and auto-hides it
    * ------------------------------- */
   var contactFormAjax = function () {
     var $form = $('#contactForm');
@@ -190,21 +191,57 @@
     var $btn = $form.find('input[type="submit"], button[type="submit"]');
     var $submitting = $form.find('.submitting');
 
+    // helper: show message, optionally as success/danger, then auto-hide
+    function showMsg($el, text, isSuccess) {
+      if (!$el.length) return;
+
+      // clear any previous auto-hide timer
+      var oldTimer = $el.data('hideTimer');
+      if (oldTimer) clearTimeout(oldTimer);
+
+      // set text
+      if (text) $el.text(text);
+
+      // if using Bootstrap alerts, toggle classes; otherwise rely on show/hide
+      if ($el.hasClass('alert')) {
+        $el.removeClass('alert-success alert-danger');
+        $el.addClass(isSuccess ? 'alert-success' : 'alert-danger');
+      }
+
+      // show (support both .d-none and inline display:none)
+      $el.removeClass('d-none').stop(true, true).fadeIn(150);
+
+      // smooth scroll to message (offset for fixed navbar)
+      var y = $el.offset().top - 100;
+      $('html, body').animate({ scrollTop: y }, 300);
+
+      // auto-hide after 6s
+      var t = setTimeout(function () {
+        $el.stop(true, true).fadeOut(250).addClass('d-none');
+      }, 6000);
+      $el.data('hideTimer', t);
+    }
+
+    function hideMsg($el) {
+      if (!$el.length) return;
+      var oldTimer = $el.data('hideTimer');
+      if (oldTimer) clearTimeout(oldTimer);
+      $el.stop(true, true).hide().addClass('d-none');
+    }
+
     $form.on('submit', async function (e) {
       e.preventDefault();
 
-      // Reset messages
-      $ok.hide().text('');
-      $bad.hide().text('');
+      hideMsg($ok);
+      hideMsg($bad);
 
-      // Guard: must have action url
       var action = $form.attr('action');
       if (!action || action === '#') {
-        $bad.text('Formuläret saknar mål-URL (action).').show();
+        showMsg($bad, 'Formuläret saknar mål-URL (action).', false);
         return;
       }
 
-      // UX: disable button
+      // disable button + small UX state
       var oldBtnText = $btn.is('input') ? $btn.val() : $btn.text();
       if ($btn.is('input')) { $btn.val('Skickar...'); } else { $btn.text('Skickar...'); }
       $btn.prop('disabled', true);
@@ -212,9 +249,6 @@
 
       try {
         var data = new FormData($form.get(0));
-        // Optional: simple honeypot support if you added <input name="_gotcha">
-        // (Formspree ignores it automatically; harmless elsewhere)
-
         var res = await fetch(action, {
           method: 'POST',
           body: data,
@@ -223,19 +257,20 @@
 
         if (res.ok) {
           $form.get(0).reset();
-          $ok.text('Tack! Ditt meddelande är skickat.').show();
+          showMsg($ok, 'Tack! Ditt meddelande är skickat.', true);
         } else {
-          var err;
-          try { err = await res.json(); } catch (_) { err = {}; }
-          var msg = (err && err.errors && err.errors.length)
-            ? err.errors.map(function (x) { return x.message; }).join(', ')
-            : 'Något gick fel. Försök igen.';
-          $bad.text(msg).show();
+          var msg = 'Något gick fel. Försök igen.';
+          try {
+            var err = await res.json();
+            if (err && err.errors && err.errors.length) {
+              msg = err.errors.map(function (x) { return x.message; }).join(', ');
+            }
+          } catch (_) { /* ignore */ }
+          showMsg($bad, msg, false);
         }
-      } catch (ex) {
-        $bad.text('Kunde inte ansluta. Kontrollera din uppkoppling och försök igen.').show();
+      } catch (_) {
+        showMsg($bad, 'Kunde inte ansluta. Kontrollera din uppkoppling och försök igen.', false);
       } finally {
-        // Re-enable button
         if ($btn.is('input')) { $btn.val(oldBtnText); } else { $btn.text(oldBtnText); }
         $btn.prop('disabled', false);
         if ($submitting.length) $submitting.hide();
@@ -243,6 +278,7 @@
     });
   };
   contactFormAjax();
+
 
 
 })(jQuery);

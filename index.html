@@ -184,102 +184,140 @@
       </div>
     </div>
 
-    <section
-      id="booking"
-      class="ftco-appointment ftco-section ftco-no-pt ftco-no-pb"
-    >
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row d-md-flex justify-content-center">
-          <div class="col-md-12">
-            <div
-              class="wrap-appointment bg-white d-md-flex pl-md-4 pb-5 pb-md-0"
-            >
-              <form action="#" class="appointment w-100">
-                <div class="row justify-content-center">
-                  <div
-                    class="col-12 col-md d-flex align-items-center pt-4 pt-md-0"
-                  >
-                    <div class="form-group py-md-4 py-2 px-4 px-md-0">
-                      <label for="name">Namn</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Ditt namn"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-12 col-md d-flex align-items-center">
-                    <div class="form-group py-md-4 py-2 px-4 px-md-0">
-                      <label for="phone">Telefonnummer</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="07x xxx xx xx"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-12 col-md d-flex align-items-center">
-                    <div class="form-group py-md-4 py-2 px-4 px-md-0">
-                      <label for="service">Välj tjänst</label>
-                      <div class="form-field">
-                        <div class="select-wrap">
-                          <div class="icon">
-                            <span class="fa fa-chevron-down"></span>
-                          </div>
-                          <select class="form-control" id="service">
-                            <option value="">Välj tjänst</option>
-                            <option>Hemstädning</option>
-                            <option>Flyttstädning</option>
-                            <option>Kontorsstädning</option>
-                            <option>Storstädning</option>
-                            <option>Fönsterputs</option>
-                            <option>Bygg-/renoveringsstäd</option>
-                          </select>
-                        </div>
+<section id="booking" class="ftco-appointment ftco-section ftco-no-pt ftco-no-pb">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row d-md-flex justify-content-center">
+      <div class="col-md-12">
+        <div class="wrap-appointment bg-white d-md-flex pl-md-4 pb-5 pb-md-0">
+          
+          <form
+            method="POST"
+            id="contactForm"
+            name="contactForm"
+            action="https://formspree.io/f/mwprwkba"
+            class="appointment w-100"
+          >
+              <!-- Success / Error messages (moved inside the form) -->
+            <div class="row">
+              <div class="col-12 px-4 px-md-0">
+                <div id="form-message-warning" class="alert alert-danger mb-4 d-none" role="alert" aria-live="polite">
+                  Något gick fel. Försök igen.
+                </div>
+                <div id="form-message-success" class="alert alert-success mb-4 d-none" role="status" aria-live="polite">
+                  Tack! Din bokning är skickad.
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center">
+
+              <!-- Namn -->
+              <div class="col-12 col-md d-flex align-items-center pt-4 pt-md-0">
+                <div class="form-group py-md-4 py-2 px-4 px-md-0">
+                  <label for="name">Namn</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-control"
+                    placeholder="Ditt namn"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Telefonnummer -->
+              <div class="col-12 col-md d-flex align-items-center">
+                <div class="form-group py-md-4 py-2 px-4 px-md-0">
+                  <label for="phone">Telefonnummer</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    class="form-control"
+                    placeholder="07x xxx xx xx"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- E-post -->
+              <div class="col-12 col-md d-flex align-items-center">
+                <div class="form-group py-md-4 py-2 px-4 px-md-0">
+                  <label for="email">E-post</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="din@mail.se"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Datum -->
+              <div class="col-12 col-md d-flex align-items-center">
+                <div class="form-group py-md-4 py-2 px-4 px-md-0">
+                  <label for="date">Datum</label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Tjänst -->
+              <div class="col-12 col-md d-flex align-items-center">
+                <div class="form-group py-md-4 py-2 px-4 px-md-0">
+                  <label for="service">Välj tjänst</label>
+                  <div class="form-field">
+                    <div class="select-wrap">
+                      <div class="icon">
+                        <span class="fa fa-chevron-down"></span>
                       </div>
-                    </div>
-                  </div>
-                  <div
-                    class="col-12 col-md d-flex align-items-center pb-4 pb-md-0"
-                  >
-                    <div class="form-group py-md-4 py-2 px-4 px-md-0">
-                      <label for="cleaner">Välj städteam</label>
-                      <div class="form-field">
-                        <div class="select-wrap">
-                          <div class="icon">
-                            <span class="fa fa-chevron-down"></span>
-                          </div>
-                          <select class="form-control" id="cleaner">
-                            <option value="">Välj team</option>
-                            <option>Team A</option>
-                            <option>Team B</option>
-                            <option>Team C</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="col-12 col-md d-flex align-items-center align-items-stretch"
-                  >
-                    <div
-                      class="form-group py-md-4 py-2 px-4 px-md-0 d-flex align-items-stretch bg-primary"
-                    >
-                      <input
-                        type="submit"
-                        value="Boka städning"
-                        class="btn btn-primary py-3 px-4"
-                      />
+                      <select
+                        class="form-control"
+                        id="service"
+                        name="service"
+                        required
+                      >
+                        <option value="">Välj tjänst</option>
+                        <option>Hemstädning</option>
+                        <option>Flyttstädning</option>
+                        <option>Kontorsstädning</option>
+                        <option>Storstädning</option>
+                        <option>Fönsterputs</option>
+                        <option>Bygg-/renoveringsstäd</option>
+                      </select>
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
+
+              <!-- Submit knapp -->
+              <div class="col-12 col-md d-flex align-items-center align-items-stretch">
+                <div class="form-group py-md-4 py-2 px-4 px-md-0 d-flex align-items-stretch bg-primary">
+                  <input
+                    type="submit"
+                    value="Boka städning"
+                    class="btn btn-primary py-3 px-4"
+                  />
+                  <div class="submitting"></div>
+                </div>
+              </div>
+
             </div>
-          </div>
+          </form>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
 
     <section class="ftco-section ftco-no-pt ftco-no-pb">
       <div class="container">
@@ -967,12 +1005,12 @@
               <ul>
                 <li>
                   <span class="icon fa fa-map-marker"></span
-                  ><span class="text">Kvarnhagsgatan 12, 165 54 Stockholm</span>
+                  ><span class="text">Kistagången 20, 164 40, Kista, Stockholm</span>
                 </li>
                 <li>
                   <a href="tel:081234567"
                     ><span class="icon fa fa-phone"></span
-                    ><span class="text">08 1234 567</span></a
+                    ><span class="text">+46 79 345 55 52</span></a
                   >
                 </li>
                 <li>
